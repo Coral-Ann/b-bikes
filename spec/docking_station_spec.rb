@@ -9,6 +9,15 @@ describe DockingStation do
       subject.dock(bike)
       expect(subject.release_bike).to eq bike
     end
+
+    it "Should stop broken bikes from being released" do
+      bike = Bike.new
+      bike2 = Bike.new
+      bike.report_broken
+      subject.dock(bike2)
+      subject.dock(bike)
+      expect(subject.release_bike).to eq bike2 
+    end
   end
 
   describe '#docking capacity check' do
@@ -36,7 +45,7 @@ describe DockingStation do
 
   it { is_expected.to respond_to(:dock).with(1).argument }
 
-  it { is_expected.to respond_to(:bikes) }
+  it { is_expected.to respond_to(:working_bikes) }
 
   it "docks something" do
     bike = Bike.new
@@ -46,7 +55,14 @@ describe DockingStation do
   it "returns docked bikes" do
     bike = Bike.new
     subject.dock(bike)
-    subject.bikes
-    expect(subject.bikes).not_to be_empty
+    subject.working_bikes
+    expect(subject.working_bikes).not_to be_empty
+  end
+
+  it "should accept all bikes" do
+    bike = Bike.new
+    bike.report_broken
+    subject.dock(bike)
+    expect(subject.spaces_left).to eq 19
   end
 end

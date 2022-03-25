@@ -8,5 +8,5 @@ describe Bike do
   
   it 'can report if broken' do
     expect(subject.report_broken).to be_truthy
- end
+  end
 end
